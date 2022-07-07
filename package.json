@@ -1,0 +1,25 @@
+{
+  "name": "funixnodejsasm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js",
+    "start-server": "node app.js"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ltdd117/FUNiXNodeJSASM.git"
+  },
+  "author": "datlt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ltdd117/FUNiXNodeJSASM/issues"
+  },
+  "homepage": "https://github.com/ltdd117/FUNiXNodeJSASM#readme",
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  }
+}
