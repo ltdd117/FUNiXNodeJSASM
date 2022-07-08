@@ -1,19 +1,20 @@
+const path = require('path')
 const express = require('express')
-
-// const routes = require('./routes')
+const bodyParser = require('body-parser')
 
 const app = express()
 
-// middleware
-app.use((req, res, next) => {
-    console.log('In the middleware')
-    next() // Allow the req to the next middleware
-})
+const adminRoutes = require('./routes/admin')
+const shopRoutes = require('./routes/shop')
 
 // middleware
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(express.static(path.join(__dirname, 'public')))
+app.use('/admin', adminRoutes)
+app.use(shopRoutes)
+
 app.use((req, res, next) => {
-    console.log('In the second middleware')
-    res.send('<h1>Hello from Express!</h1>')
+    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'))
 })
 
 app.listen(3000)
