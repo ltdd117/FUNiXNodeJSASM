@@ -2,25 +2,35 @@ const Product = require('../models/product')
 const Cart = require('../models/cart')
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
-  .then(([rows, fieldData]) => {
+  Product.findAll()
+  .then(products => {
     res.render('shop/product-list', {
-      prods: rows,
+      prods: products,
       pageTitle: 'All Products',
       path: '/products'
     })
   })
-  .catch(err => console.log(err))
-  
+  .catch(err => {
+    console.log(err)
+  })
 }
 
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId
-  Product.findById(prodId)
-  .then(([product]) => {
+  // Product.findAll({where: {id: prodId}})
+  // .then(products => {
+  //   res.render('shop/product-detail', {
+  //     product: products[0],
+  //     pageTitle: products[0].title,
+  //     path: '/products'
+  //   })
+  // })
+  // .catch(err => console.log(err))
+  Product.findByPk(prodId)
+  .then((product) => {
     res.render('shop/product-detail', {
-      product: product[0],
-      pageTitle: product[0].title,
+      product: product,
+      pageTitle: product.title,
       path: '/products'
     })
   })
@@ -29,21 +39,23 @@ exports.getProduct = (req, res, next) => {
 }
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
-  .then(([rows, fieldData]) => {
+  Product.findAll()
+  .then(products => {
     res.render('shop/index', {
-      prods: rows,
+      prods: products,
       pageTitle: 'Shop',
       path: '/'
     })
   })
-  .catch(err => console.log(err))
-  
+  .catch(err => {
+    console.log(err)
+  })
 }
 
 exports.getCart = (req, res, next) => {
   Cart.getCart(cart => {
-    Product.fetchAll(products => {
+    Product.findAll()
+    .then(products => {
       const cartProducts = []
       for (let product of products) {
         const cartProductData = cart.products.find(prod => prod.id === product.id)
@@ -57,8 +69,8 @@ exports.getCart = (req, res, next) => {
         products: cartProducts
       })
     })
+    .catch(err => console.log(err))
   })
-  
 }
 
 exports.postCart = (req, res, next) => {

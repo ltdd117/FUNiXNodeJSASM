@@ -4,7 +4,10 @@ const bodyParser = require('body-parser')
 const expressHbs = require('express-handlebars')
 
 const errorController = require('./controllers/error')
-const db = require('./util/database')
+const sequelize = require('./util/database')
+const Product = require('./models/product')
+const User = require('./models/user')
+
 const app = express()
 
 app.set('view engine', 'ejs')
@@ -12,9 +15,6 @@ app.set('views', 'views')
 
 const adminRoutes = require('./routes/admin')
 const shopRoutes = require('./routes/shop')
-
-// database
-
 
 // middleware
 app.use(bodyParser.urlencoded({extended: false}))
@@ -24,4 +24,13 @@ app.use(shopRoutes)
 
 app.use(errorController.get404)
 
-app.listen(3000)
+// database
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' })
+User.hasMany(Product)
+
+sequelize.sync({ force: true })
+.then(res => {
+    // console.log(res)
+    app.listen(3000)
+})
+.catch(err => console.log(err))
